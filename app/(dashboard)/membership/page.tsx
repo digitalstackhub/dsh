@@ -14,14 +14,12 @@ export default async function MembershipPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // Fetch user profile
   const { data: profile } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', user.id)
     .single()
 
-  // Fetch current subscription
   const { data: subscription } = await supabase
     .from('subscriptions')
     .select('*, plans(name, slug, color, download_limit)')
@@ -31,7 +29,6 @@ export default async function MembershipPage() {
     .limit(1)
     .maybeSingle()
 
-  // Fetch all plans for upgrade options
   const { data: plans } = await supabase
     .from('plans')
     .select('*')
@@ -49,7 +46,6 @@ export default async function MembershipPage() {
       </div>
 
       <Suspense fallback={<Skeleton className="h-40 rounded-2xl" />}>
-        {/* Current Plan */}
         <Card className="border-white/10 overflow-hidden">
           <div className="h-1 bg-gradient-to-r from-indigo-500 to-purple-500" />
           <CardHeader>
@@ -62,9 +58,9 @@ export default async function MembershipPage() {
                   <CardTitle>{currentPlan?.name || 'Free'}</CardTitle>
                   <CardDescription>
                     {isTrialActive
-                      ? Trial active until 
+                      ? `Trial active until ${new Date(profile.trial_ends_at!).toLocaleDateString()}`
                       : subscription
-                      ? Renews 
+                      ? `Renews ${subscription.auto_renew ? 'automatically' : 'manually'}`
                       : 'No active subscription'}
                   </CardDescription>
                 </div>
@@ -94,14 +90,17 @@ export default async function MembershipPage() {
       </Suspense>
 
       <Suspense fallback={<div className="grid grid-cols-3 gap-6"><Skeleton className="h-64" /><Skeleton className="h-64" /><Skeleton className="h-64" /></div>}>
-        {/* Available Plans */}
         <div>
           <h2 className="text-lg font-semibold mb-4">Available Plans</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {plans?.map((plan: any) => (
               <Card
                 key={plan.id}
-                className={order-white/10 h-full flex flex-col }
+                className={`border-white/10 h-full flex flex-col ${
+                  (currentPlan?.slug === plan.slug || (!subscription && plan.slug === 'free'))
+                    ? 'border-primary/30 shadow-glow'
+                    : ''
+                }`}
               >
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
@@ -109,7 +108,7 @@ export default async function MembershipPage() {
                     {plan.popular_badge && <Badge variant="success">Popular</Badge>}
                   </CardTitle>
                   <div className="text-3xl font-bold mt-2">
-                    {plan.price_monthly === 0 ? 'Free' : $}
+                    {plan.price_monthly === 0 ? 'Free' : `$${plan.price_monthly}`}
                     {plan.price_monthly > 0 && <span className="text-sm text-muted-foreground">/mo</span>}
                   </div>
                 </CardHeader>
@@ -117,7 +116,7 @@ export default async function MembershipPage() {
                   <ul className="space-y-2 text-sm">
                     {plan.features?.map((f: any, i: number) => (
                       <li key={i} className="flex items-center gap-2">
-                        <Check className={h-4 w-4 } />
+                        <Check className={`h-4 w-4 ${f.included ? 'text-emerald-400' : 'text-muted-foreground/30'}`} />
                         <span className={f.included ? '' : 'text-muted-foreground/50 line-through'}>
                           {f.text}
                         </span>
@@ -131,7 +130,7 @@ export default async function MembershipPage() {
                       Current Plan
                     </Button>
                   ) : (
-                    <Link href={/checkout?plan=}>
+                    <Link href={`/checkout?plan=${plan.id}`}>
                       <Button className="w-full">
                         {plan.slug === 'free' ? 'Downgrade' : 'Upgrade'} <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>

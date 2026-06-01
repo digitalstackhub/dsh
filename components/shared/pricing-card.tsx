@@ -44,14 +44,18 @@ export function PricingCard({ plan, currency = '$', yearly = false }: PricingCar
         </div>
       )}
       <Card
-        className={p-6 border-2 h-full flex flex-col transition-all duration-300 }
+        className={`p-6 border-2 h-full flex flex-col transition-all duration-300 ${
+          plan.popular_badge
+            ? 'border-primary/30 shadow-glow'
+            : 'border-white/10 group-hover:border-white/20'
+        }`}
       >
         <div className="text-center mb-6">
           <h3 className="text-lg font-semibold mb-1">{plan.name}</h3>
           <p className="text-sm text-muted-foreground">{plan.description}</p>
           <div className="mt-4">
             <span className="text-4xl font-bold">
-              {price === 0 ? 'Free' : ${currency}}
+              {price === 0 ? 'Free' : `${currency}${price}`}
             </span>
             {price > 0 && <span className="text-muted-foreground text-sm">{period}</span>}
           </div>
@@ -75,14 +79,14 @@ export function PricingCard({ plan, currency = '$', yearly = false }: PricingCar
           ))}
         </ul>
 
-        <Link href={price === 0 ? '/register' : /checkout?plan=} className="mt-auto">
+        <Link href={price === 0 ? '/register' : `/checkout?plan=${plan.id}`} className="mt-auto">
           <Button
             className="w-full"
             variant={plan.popular_badge ? 'default' : 'outline'}
             style={
               plan.popular_badge && plan.color
                 ? {
-                    background: linear-gradient(135deg, , dd),
+                    background: `linear-gradient(135deg, ${plan.color}, ${plan.color}dd)`,
                   }
                 : undefined
             }

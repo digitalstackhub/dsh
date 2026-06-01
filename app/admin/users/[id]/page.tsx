@@ -12,7 +12,7 @@ import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { toast } from '@/components/ui/use-toast'
 import { useSupabase } from '@/components/providers/supabase-provider'
-import { ArrowLeft, Save, Ban, User, Mail, Shield, Gift, Calendar } from 'lucide-react'
+import { ArrowLeft, Save, Ban } from 'lucide-react'
 import Link from 'next/link'
 
 export default function AdminUserDetailPage() {
@@ -66,16 +66,13 @@ export default function AdminUserDetailPage() {
   }
 
   if (loading) return <Skeleton className="h-96 rounded-2xl" />
-
   if (!user) return <div className="text-center py-20">User not found.</div>
 
   return (
     <div className="space-y-6 max-w-2xl">
       <div className="flex items-center gap-4">
         <Link href="/admin/users">
-          <Button variant="ghost" size="icon">
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
+          <Button variant="ghost" size="icon"><ArrowLeft className="h-5 w-5" /></Button>
         </Link>
         <h1 className="text-2xl font-bold">Edit User</h1>
       </div>
@@ -96,17 +93,11 @@ export default function AdminUserDetailPage() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Full Name</Label>
-              <Input
-                value={user.full_name || ''}
-                onChange={(e) => setUser({ ...user, full_name: e.target.value })}
-              />
+              <Input value={user.full_name || ''} onChange={(e) => setUser({ ...user, full_name: e.target.value })} />
             </div>
             <div className="space-y-2">
               <Label>Username</Label>
-              <Input
-                value={user.username || ''}
-                onChange={(e) => setUser({ ...user, username: e.target.value })}
-              />
+              <Input value={user.username || ''} onChange={(e) => setUser({ ...user, username: e.target.value })} />
             </div>
           </div>
           <div className="space-y-2">
@@ -129,52 +120,32 @@ export default function AdminUserDetailPage() {
             </div>
             <div className="space-y-2">
               <Label>Points Balance</Label>
-              <Input
-                type="number"
-                value={user.points_balance}
-                onChange={(e) => setUser({ ...user, points_balance: Number(e.target.value) })}
-              />
+              <Input type="number" value={user.points_balance} onChange={(e) => setUser({ ...user, points_balance: Number(e.target.value) })} />
             </div>
             <div className="space-y-2">
               <Label>Affiliate Earnings</Label>
-              <Input
-                type="number"
-                step="0.01"
-                value={user.affiliate_earnings}
-                onChange={(e) => setUser({ ...user, affiliate_earnings: Number(e.target.value) })}
-              />
+              <Input type="number" step="0.01" value={user.affiliate_earnings} onChange={(e) => setUser({ ...user, affiliate_earnings: Number(e.target.value) })} />
             </div>
           </div>
           <Separator />
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Ban className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm">Banned</span>
-            </div>
+            <div className="flex items-center gap-2"><Ban className="h-4 w-4 text-muted-foreground" /><span className="text-sm">Banned</span></div>
             <Switch checked={user.is_banned} onCheckedChange={handleBanToggle} />
           </div>
           <div className="flex items-center justify-between">
             <span className="text-sm">Joined</span>
-            <span className="text-sm text-muted-foreground">
-              {new Date(user.created_at).toLocaleDateString()}
-            </span>
+            <span className="text-sm text-muted-foreground">{new Date(user.created_at).toLocaleDateString()}</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-sm">Last Login</span>
-            <span className="text-sm text-muted-foreground">
-              {user.last_login_at ? new Date(user.last_login_at).toLocaleDateString() : 'Never'}
-            </span>
+            <span className="text-sm text-muted-foreground">{user.last_login_at ? new Date(user.last_login_at).toLocaleDateString() : 'Never'}</span>
           </div>
         </CardContent>
       </Card>
 
       <div className="flex gap-3">
-        <Button onClick={handleSave} disabled={saving}>
-          <Save className="h-4 w-4 mr-1" /> Save Changes
-        </Button>
-        <Button variant="destructive" onClick={handleBanToggle}>
-          <Ban className="h-4 w-4 mr-1" /> {user.is_banned ? 'Unban' : 'Ban'} User
-        </Button>
+        <Button onClick={handleSave} disabled={saving}><Save className="h-4 w-4 mr-1" /> Save Changes</Button>
+        <Button variant="destructive" onClick={handleBanToggle}><Ban className="h-4 w-4 mr-1" /> {user.is_banned ? 'Unban' : 'Ban'} User</Button>
       </div>
     </div>
   )

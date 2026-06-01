@@ -16,7 +16,7 @@ export async function POST() {
 
     // Insert a record into the backups table (metadata only)
     await supabase.from('database_backups').insert({
-      filename: ackup-.sql,
+      filename: `backup-${Date.now()}.sql`,
       status: 'pending',
       created_by: user?.id,
     })

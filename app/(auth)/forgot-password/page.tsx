@@ -21,7 +21,7 @@ export default function ForgotPasswordPage() {
     setLoading(true)
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: ${window.location.origin}/reset-password,
+        redirectTo: `${window.location.origin}/reset-password`,
       })
       if (error) throw error
       setSent(true)
@@ -35,11 +35,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-dark-900 p-8">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-md"
-      >
+      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="w-full max-w-md">
         <div className="glass-card p-8 space-y-6">
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 mb-4 shadow-glow">
@@ -47,7 +43,7 @@ export default function ForgotPasswordPage() {
             </div>
             <h2 className="text-2xl font-bold">Forgot password?</h2>
             <p className="text-muted-foreground mt-1">
-              {sent ? 'Check your email for the reset link.' : 'Enter your email and we’ll send you a reset link.'}
+              {sent ? 'Check your email for the reset link.' : 'Enter your email and we\'ll send you a reset link.'}
             </p>
           </div>
 
@@ -57,18 +53,9 @@ export default function ForgotPasswordPage() {
                 <Label htmlFor="email">Email</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10"
-                    required
-                  />
+                  <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} className="pl-10" required />
                 </div>
               </div>
-
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? 'Sending...' : 'Send Reset Link'}
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -86,10 +73,7 @@ export default function ForgotPasswordPage() {
           )}
 
           <div className="text-center">
-            <Link
-              href="/login"
-              className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
+            <Link href="/login" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors">
               <ArrowLeft className="mr-1 h-4 w-4" />
               Back to login
             </Link>

@@ -1,7 +1,7 @@
 ﻿'use client'
 
 import { useEffect, useState } from 'react'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -72,7 +72,7 @@ export default function AdminCouponsPage() {
               {coupons.map((c) => (
                 <tr key={c.id}>
                   <td className="font-mono font-bold">{c.code}</td>
-                  <td>{c.discount_type === 'percentage' ? ${c.discount_value}% : $}</td>
+                  <td>{c.discount_type === 'percentage' ? `${c.discount_value}%` : `$${c.discount_value}`}</td>
                   <td>{c.used_count}/{c.usage_limit}</td>
                   <td className="text-xs">{c.valid_until ? new Date(c.valid_until).toLocaleDateString() : 'No limit'}</td>
                   <td>
@@ -110,18 +110,30 @@ export default function AdminCouponsPage() {
 }
 
 function CouponForm({ coupon, onSave }: any) {
-  const [form, setForm] = useState({
-    code: '',
-    discount_type: 'percentage',
-    discount_value: 10,
-    usage_limit: 100,
-    min_purchase: 0,
-    valid_from: new Date().toISOString().split('T')[0],
-    valid_until: '',
-    is_active: true,
-    ...coupon,
-    valid_from: coupon?.valid_from ? new Date(coupon.valid_from).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-    valid_until: coupon?.valid_until ? new Date(coupon.valid_until).toISOString().split('T')[0] : '',
+  const [form, setForm] = useState(() => {
+    const defaults = {
+      code: '',
+      discount_type: 'percentage',
+      discount_value: 10,
+      usage_limit: 100,
+      min_purchase: 0,
+      is_active: true,
+      valid_from: new Date().toISOString().split('T')[0],
+      valid_until: '',
+    }
+    if (coupon && coupon.id) {
+      return {
+        ...defaults,
+        ...coupon,
+        valid_from: coupon.valid_from
+          ? new Date(coupon.valid_from).toISOString().split('T')[0]
+          : defaults.valid_from,
+        valid_until: coupon.valid_until
+          ? new Date(coupon.valid_until).toISOString().split('T')[0]
+          : defaults.valid_until,
+      }
+    }
+    return defaults
   })
 
   return (

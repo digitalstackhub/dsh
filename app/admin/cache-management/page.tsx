@@ -13,7 +13,6 @@ export default function AdminCacheManagementPage() {
   const clearCache = async () => {
     setClearing(true)
     try {
-      // Call API to clear Next.js cache (revalidate all)
       const res = await fetch('/api/admin/clear-cache', { method: 'POST' })
       if (res.ok) {
         toast({ title: 'Cache Cleared', description: 'All pages and data caches have been refreshed.', variant: 'success' })
@@ -69,7 +68,7 @@ export default function AdminCacheManagementPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <Button onClick={clearCache} disabled={clearing} size="lg">
-            <RefreshCw className={h-4 w-4 mr-2 } />
+            <RefreshCw className={`h-4 w-4 mr-2 ${clearing ? 'animate-spin' : ''}`} />
             {clearing ? 'Clearing...' : 'Clear All Cache'}
           </Button>
           <p className="text-sm text-muted-foreground">

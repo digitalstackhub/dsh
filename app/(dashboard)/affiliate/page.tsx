@@ -13,27 +13,23 @@ export default async function AffiliatePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // Fetch profile (referral code, earnings)
   const { data: profile } = await supabase
     .from('profiles')
     .select('referral_code, affiliate_earnings, affiliate_paid')
     .eq('id', user.id)
     .single()
 
-  // Fetch affiliate settings (commission rate)
   const { data: settings } = await supabase
     .from('affiliate_settings')
     .select('commission_percentage, cookie_days, min_payout')
     .eq('is_active', true)
     .single()
 
-  // Count referrals
   const { count: referralCount } = await supabase
     .from('affiliate_referrals')
     .select('*', { count: 'exact', head: true })
     .eq('referrer_id', user.id)
 
-  // Get recent referrals (last 5)
   const { data: referrals } = await supabase
     .from('affiliate_referrals')
     .select('id, commission_earned, status, created_at, referred:profiles!referred_id(full_name, email)')
@@ -41,7 +37,8 @@ export default async function AffiliatePage() {
     .order('created_at', { ascending: false })
     .limit(5)
 
-  const referralLink = ${process.env.NEXT_PUBLIC_APP_URL}/register?ref=
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+  const referralLink = `${appUrl}/register?ref=${profile?.referral_code}`
 
   return (
     <div className="space-y-6">
@@ -59,7 +56,7 @@ export default async function AffiliatePage() {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Total Earned</p>
-                <p className="text-2xl font-bold"></p>
+                <p className="text-2xl font-bold">${(profile?.affiliate_earnings || 0).toFixed(2)}</p>
               </div>
             </CardContent>
           </Card>
@@ -106,7 +103,6 @@ export default async function AffiliatePage() {
               variant="outline"
               onClick={() => {
                 navigator.clipboard.writeText(referralLink)
-                // toast handled via client component later
               }}
             >
               <Copy className="h-4 w-4 mr-1" /> Copy
@@ -133,7 +129,7 @@ export default async function AffiliatePage() {
                         {new Date(ref.created_at).toLocaleDateString()} · {ref.status}
                       </p>
                     </div>
-                    <Badge variant="success"></Badge>
+                    <Badge variant="success">${ref.commission_earned?.toFixed(2)}</Badge>
                   </div>
                 ))}
               </div>

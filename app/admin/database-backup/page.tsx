@@ -38,7 +38,7 @@ export default function AdminDatabaseBackupPage() {
             Trigger a manual backup of your entire database. Supabase automatically creates daily backups on paid plans.
           </p>
           <Button onClick={triggerBackup} disabled={backingUp} size="lg">
-            <HardDrive className={h-4 w-4 mr-2 } />
+            <HardDrive className={`h-4 w-4 mr-2 ${backingUp ? 'animate-pulse' : ''}`} />
             {backingUp ? 'Starting Backup...' : 'Create Backup'}
           </Button>
         </CardContent>

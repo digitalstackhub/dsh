@@ -41,7 +41,7 @@ export function ActivityFeed({ activities }: { activities: any[] }) {
               <div
                 key={activity.id}
                 className="flex items-center gap-3 p-3 bg-dark-900 rounded-xl border border-white/5"
-                style={{ animationDelay: ${i * 100}ms }}
+                style={{ animationDelay: `${i * 100}ms` }}
               >
                 <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
                   <Icon className="h-4 w-4 text-muted-foreground" />

@@ -25,7 +25,7 @@ export function ResourceGrid({ resources }: { resources: any[] }) {
           transition={{ duration: 0.4, delay: i * 0.05 }}
           viewport={{ once: true }}
         >
-          <Link href={/resources/}>
+          <Link href={`/resources/${resource.slug}`}>
             <Card className="h-full border-white/10 hover:border-primary/30 hover:shadow-glow transition-all duration-300 group overflow-hidden">
               <div className="relative h-48 bg-gradient-to-br from-dark-800 to-dark-700 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-t from-dark-900/80 to-transparent" />

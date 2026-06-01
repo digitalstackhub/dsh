@@ -85,7 +85,7 @@ export default function AdminPlansPage() {
                     {plan.name}
                     {plan.popular_badge && <Badge variant="success" className="ml-2">Popular</Badge>}
                   </td>
-                  <td>/mo</td>
+                  <td>${plan.price_monthly}/mo</td>
                   <td>{plan.download_limit}</td>
                   <td>{plan.points_multiplier}x</td>
                   <td>

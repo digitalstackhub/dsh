@@ -18,7 +18,7 @@ export default async function AdminUsersPage({
 
   let query = supabase.from('profiles').select('*')
   if (search) {
-    query = query.or(email.ilike.%%,full_name.ilike.%%)
+    query = query.or(`email.ilike.%${search}%,full_name.ilike.%${search}%`)
   }
   const { data: users } = await query.order('created_at', { ascending: false }).limit(50)
 
@@ -69,7 +69,7 @@ export default async function AdminUsersPage({
                     </td>
                     <td>
                       <div className="flex gap-2">
-                        <Link href={/admin/users/}>
+                        <Link href={`/admin/users/${user.id}`}>
                           <Button size="sm" variant="outline">
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>

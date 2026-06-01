@@ -1,7 +1,7 @@
 ﻿'use client'
 
 import { useEffect, useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { toast } from '@/components/ui/use-toast'
@@ -61,19 +61,11 @@ export default function AdminTrialsPage() {
                     <td className="font-medium">{t.full_name || 'N/A'}</td>
                     <td className="text-muted-foreground">{t.email}</td>
                     <td>{ends.toLocaleDateString()}</td>
-                    <td>
-                      <Badge variant={active ? 'success' : 'secondary'}>
-                        {active ? 'Active' : 'Expired'}
-                      </Badge>
-                    </td>
+                    <td><Badge variant={active ? 'success' : 'secondary'}>{active ? 'Active' : 'Expired'}</Badge></td>
                     <td>
                       <div className="flex gap-2">
-                        <Button size="sm" variant="outline" onClick={() => extendTrial(t.id, 7)}>
-                          +7 days
-                        </Button>
-                        <Button size="sm" variant="destructive" onClick={() => cancelTrial(t.id)}>
-                          Cancel
-                        </Button>
+                        <Button size="sm" variant="outline" onClick={() => extendTrial(t.id, 7)}>+7 days</Button>
+                        <Button size="sm" variant="destructive" onClick={() => cancelTrial(t.id)}>Cancel</Button>
                       </div>
                     </td>
                   </tr>

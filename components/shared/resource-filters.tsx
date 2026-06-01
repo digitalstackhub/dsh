@@ -17,7 +17,7 @@ export function ResourceFilters({ categories }: { categories: any[] }) {
     } else {
       params.delete('category')
     }
-    router.push(/resources?)
+    router.push('/resources?' + params.toString())
   }
 
   const handleSearch = (value: string) => {
@@ -27,7 +27,7 @@ export function ResourceFilters({ categories }: { categories: any[] }) {
     } else {
       params.delete('search')
     }
-    router.push(/resources?)
+    router.push('/resources?' + params.toString())
   }
 
   return (

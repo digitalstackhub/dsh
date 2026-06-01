@@ -1,7 +1,7 @@
 ﻿'use client'
 
 import { useEffect, useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -71,7 +71,6 @@ export default function AdminSettingsPage() {
                       onCheckedChange={(v) => {
                         const updated = { ...setting, setting_value: v.toString() }
                         handleSave(updated)
-                        // Update locally
                         setSettings(settings.map((s) => (s.id === setting.id ? updated : s)))
                       }}
                     />

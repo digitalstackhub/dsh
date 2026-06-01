@@ -1,7 +1,7 @@
 ﻿'use client'
 
 import { useEffect, useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -51,9 +51,7 @@ export default function AdminAdsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Advertisements</h1>
-        <Button onClick={() => { setEditing({}); setDialogOpen(true) }}>
-          <Plus className="h-4 w-4 mr-1" /> Create Ad
-        </Button>
+        <Button onClick={() => { setEditing({}); setDialogOpen(true) }}><Plus className="h-4 w-4 mr-1" /> Create Ad</Button>
       </div>
 
       <Card className="border-white/10">
@@ -61,13 +59,7 @@ export default function AdminAdsPage() {
           <table className="data-table">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Placement</th>
-                <th>Impressions</th>
-                <th>Clicks</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th>Name</th><th>Type</th><th>Placement</th><th>Impressions</th><th>Clicks</th><th>Status</th><th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -81,12 +73,8 @@ export default function AdminAdsPage() {
                   <td><Badge variant={ad.is_active ? 'success' : 'secondary'}>{ad.is_active ? 'Active' : 'Paused'}</Badge></td>
                   <td>
                     <div className="flex gap-2">
-                      <Button size="sm" variant="outline" onClick={() => { setEditing(ad); setDialogOpen(true) }}>
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button size="sm" variant="destructive" onClick={() => handleDelete(ad.id)}>
-                        <Trash className="h-4 w-4" />
-                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => { setEditing(ad); setDialogOpen(true) }}><Edit className="h-4 w-4" /></Button>
+                      <Button size="sm" variant="destructive" onClick={() => handleDelete(ad.id)}><Trash className="h-4 w-4" /></Button>
                     </div>
                   </td>
                 </tr>
@@ -98,9 +86,7 @@ export default function AdminAdsPage() {
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{editing?.id ? 'Edit' : 'Create'} Advertisement</DialogTitle>
-          </DialogHeader>
+          <DialogHeader><DialogTitle>{editing?.id ? 'Edit' : 'Create'} Advertisement</DialogTitle></DialogHeader>
           <AdForm ad={editing} onSave={handleSave} />
         </DialogContent>
       </Dialog>
@@ -109,75 +95,52 @@ export default function AdminAdsPage() {
 }
 
 function AdForm({ ad, onSave }: any) {
-  const [form, setForm] = useState({
-    name: '',
-    type: 'image',
-    content: '',
-    placement: 'header',
-    impressions_limit: 0,
-    clicks_limit: 0,
-    start_date: new Date().toISOString().split('T')[0],
-    end_date: '',
-    is_active: true,
-    ...ad,
-    start_date: ad?.start_date ? new Date(ad.start_date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-    end_date: ad?.end_date ? new Date(ad.end_date).toISOString().split('T')[0] : '',
+  const [form, setForm] = useState(() => {
+    const defaults = {
+      name: '',
+      type: 'image',
+      content: '',
+      placement: 'header',
+      impressions_limit: 0,
+      clicks_limit: 0,
+      is_active: true,
+      start_date: new Date().toISOString().split('T')[0],
+      end_date: '',
+    }
+    if (ad && ad.id) {
+      return {
+        ...defaults,
+        ...ad,
+        start_date: ad.start_date ? new Date(ad.start_date).toISOString().split('T')[0] : defaults.start_date,
+        end_date: ad.end_date ? new Date(ad.end_date).toISOString().split('T')[0] : defaults.end_date,
+      }
+    }
+    return defaults
   })
 
   return (
     <div className="space-y-4">
-      <div className="space-y-2">
-        <Label>Name</Label>
-        <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-      </div>
+      <div className="space-y-2"><Label>Name</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label>Type</Label>
-          <select
-            className="w-full h-11 rounded-xl border border-white/10 bg-white/5 px-4 text-sm"
-            value={form.type}
-            onChange={(e) => setForm({ ...form, type: e.target.value })}
-          >
-            <option value="image">Image</option>
-            <option value="html">HTML</option>
+          <select className="w-full h-11 rounded-xl border border-white/10 bg-white/5 px-4" value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}>
+            <option value="image">Image</option><option value="html">HTML</option>
           </select>
         </div>
-        <div className="space-y-2">
-          <Label>Placement</Label>
-          <Input value={form.placement} onChange={(e) => setForm({ ...form, placement: e.target.value })} />
-        </div>
+        <div className="space-y-2"><Label>Placement</Label><Input value={form.placement} onChange={(e) => setForm({ ...form, placement: e.target.value })} /></div>
       </div>
-      <div className="space-y-2">
-        <Label>Content (URL or HTML)</Label>
-        <Textarea value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} rows={3} />
+      <div className="space-y-2"><Label>Content (URL or HTML)</Label><Textarea value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} rows={3} /></div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2"><Label>Impressions Limit (0 = unlimited)</Label><Input type="number" value={form.impressions_limit} onChange={(e) => setForm({ ...form, impressions_limit: Number(e.target.value) })} /></div>
+        <div className="space-y-2"><Label>Clicks Limit (0 = unlimited)</Label><Input type="number" value={form.clicks_limit} onChange={(e) => setForm({ ...form, clicks_limit: Number(e.target.value) })} /></div>
       </div>
       <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label>Impressions Limit (0 = unlimited)</Label>
-          <Input type="number" value={form.impressions_limit} onChange={(e) => setForm({ ...form, impressions_limit: Number(e.target.value) })} />
-        </div>
-        <div className="space-y-2">
-          <Label>Clicks Limit (0 = unlimited)</Label>
-          <Input type="number" value={form.clicks_limit} onChange={(e) => setForm({ ...form, clicks_limit: Number(e.target.value) })} />
-        </div>
+        <div className="space-y-2"><Label>Start Date</Label><Input type="date" value={form.start_date} onChange={(e) => setForm({ ...form, start_date: e.target.value })} /></div>
+        <div className="space-y-2"><Label>End Date</Label><Input type="date" value={form.end_date} onChange={(e) => setForm({ ...form, end_date: e.target.value })} /></div>
       </div>
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label>Start Date</Label>
-          <Input type="date" value={form.start_date} onChange={(e) => setForm({ ...form, start_date: e.target.value })} />
-        </div>
-        <div className="space-y-2">
-          <Label>End Date</Label>
-          <Input type="date" value={form.end_date} onChange={(e) => setForm({ ...form, end_date: e.target.value })} />
-        </div>
-      </div>
-      <div className="flex items-center gap-2">
-        <Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} />
-        <Label>Active</Label>
-      </div>
-      <DialogFooter>
-        <Button onClick={() => onSave(form)}>Save</Button>
-      </DialogFooter>
+      <div className="flex items-center gap-2"><Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} /><Label>Active</Label></div>
+      <DialogFooter><Button onClick={() => onSave(form)}>Save</Button></DialogFooter>
     </div>
   )
 }

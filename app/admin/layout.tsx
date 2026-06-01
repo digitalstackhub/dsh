@@ -13,7 +13,6 @@ export default async function AdminLayout({
   
   if (!user) redirect('/login')
 
-  // Check if user is admin
   const { data: profile } = await supabase
     .from('profiles')
     .select('role')

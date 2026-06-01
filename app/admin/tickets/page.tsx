@@ -37,9 +37,10 @@ export default function AdminTicketsPage() {
 
   const sendReply = async () => {
     if (!reply.trim()) return
+    const { data: { user } } = await supabase.auth.getUser()
     await supabase.from('support_replies').insert({
       ticket_id: viewing.id,
-      user_id: (await supabase.auth.getUser()).data.user?.id,
+      user_id: user?.id,
       message: reply,
       is_staff_reply: true,
     })

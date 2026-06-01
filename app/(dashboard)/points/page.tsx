@@ -12,26 +12,22 @@ export default async function PointsPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // Fetch profile
   const { data: profile } = await supabase
     .from('profiles')
     .select('points_balance, total_points_earned')
     .eq('id', user.id)
     .single()
 
-  // Fetch levels
   const { data: levels } = await supabase
     .from('levels')
     .select('*')
     .order('min_points', { ascending: true })
 
-  // Fetch points rules
   const { data: rules } = await supabase
     .from('points_rules')
     .select('*')
     .eq('is_active', true)
 
-  // Determine current level
   const points = profile?.points_balance || 0
   const currentLevel = levels?.find(
     (l: any) => points >= l.min_points && (l.max_points === null || points <= l.max_points)
@@ -74,7 +70,7 @@ export default async function PointsPage() {
             <div className="mb-2">
               <div className="flex justify-between text-sm mb-1">
                 <span>Progress to {nextLevel?.level_name || 'Max'}</span>
-                <span>{nextLevel ? ${(nextLevel.min_points - points).toLocaleString()} pts needed : 'Max level!'}</span>
+                <span>{nextLevel ? `${(nextLevel.min_points - points).toLocaleString()} pts needed` : 'Max level!'}</span>
               </div>
               <Progress value={progress} className="h-3" />
             </div>
@@ -92,7 +88,9 @@ export default async function PointsPage() {
               {levels?.map((level: any, i: number) => (
                 <div
                   key={level.id}
-                  className={lex items-center gap-4 p-3 rounded-xl border }
+                  className={`flex items-center gap-4 p-3 rounded-xl border ${
+                    level.id === currentLevel?.id ? 'border-primary/30 bg-primary/5' : 'border-white/5'
+                  }`}
                 >
                   <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg"
                     style={{ backgroundColor: level.color + '20', color: level.color }}>

@@ -112,11 +112,7 @@ export default function AdminResourcesPage() {
           <DialogHeader>
             <DialogTitle>{editing?.id ? 'Edit Resource' : 'Add Resource'}</DialogTitle>
           </DialogHeader>
-          <ResourceForm
-            resource={editing}
-            categories={categories}
-            onSave={handleSave}
-          />
+          <ResourceForm resource={editing} categories={categories} onSave={handleSave} />
         </DialogContent>
       </Dialog>
     </div>

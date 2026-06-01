@@ -1,7 +1,7 @@
 ﻿'use client'
 
 import { useEffect, useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -66,14 +66,9 @@ export default function AdminPaymentGatewaysPage() {
               {gateways.map((g) => (
                 <tr key={g.id}>
                   <td className="font-medium">{g.display_name}</td>
-                  <td>
-                    <Switch
-                      checked={g.is_enabled}
-                      onCheckedChange={() => toggleEnabled(g.id, g.is_enabled)}
-                    />
-                  </td>
+                  <td><Switch checked={g.is_enabled} onCheckedChange={() => toggleEnabled(g.id, g.is_enabled)} /></td>
                   <td>{g.fee_percentage}%</td>
-                  <td></td>
+                  <td>${g.fee_fixed}</td>
                   <td className="text-xs">{g.supported_currencies?.join(', ')}</td>
                   <td><Badge variant={g.sandbox_mode ? 'warning' : 'success'}>{g.sandbox_mode ? 'Sandbox' : 'Live'}</Badge></td>
                   <td>
@@ -90,61 +85,24 @@ export default function AdminPaymentGatewaysPage() {
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Edit: {editing?.display_name}</DialogTitle>
-          </DialogHeader>
+          <DialogHeader><DialogTitle>Edit: {editing?.display_name}</DialogTitle></DialogHeader>
           {editing && (
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Fee Percentage</Label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    value={editing.fee_percentage}
-                    onChange={(e) => setEditing({ ...editing, fee_percentage: Number(e.target.value) })}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Fee Fixed ($)</Label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    value={editing.fee_fixed}
-                    onChange={(e) => setEditing({ ...editing, fee_fixed: Number(e.target.value) })}
-                  />
-                </div>
+                <div className="space-y-2"><Label>Fee Percentage</Label><Input type="number" step="0.01" value={editing.fee_percentage} onChange={(e) => setEditing({ ...editing, fee_percentage: Number(e.target.value) })} /></div>
+                <div className="space-y-2"><Label>Fee Fixed ($)</Label><Input type="number" step="0.01" value={editing.fee_fixed} onChange={(e) => setEditing({ ...editing, fee_fixed: Number(e.target.value) })} /></div>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Min Amount ($)</Label>
-                  <Input
-                    type="number"
-                    value={editing.min_amount}
-                    onChange={(e) => setEditing({ ...editing, min_amount: Number(e.target.value) })}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Max Amount ($)</Label>
-                  <Input
-                    type="number"
-                    value={editing.max_amount}
-                    onChange={(e) => setEditing({ ...editing, max_amount: Number(e.target.value) })}
-                  />
-                </div>
+                <div className="space-y-2"><Label>Min Amount ($)</Label><Input type="number" value={editing.min_amount} onChange={(e) => setEditing({ ...editing, min_amount: Number(e.target.value) })} /></div>
+                <div className="space-y-2"><Label>Max Amount ($)</Label><Input type="number" value={editing.max_amount} onChange={(e) => setEditing({ ...editing, max_amount: Number(e.target.value) })} /></div>
               </div>
               <div className="flex items-center gap-2">
-                <Switch
-                  checked={editing.sandbox_mode}
-                  onCheckedChange={(v) => setEditing({ ...editing, sandbox_mode: v })}
-                />
+                <Switch checked={editing.sandbox_mode} onCheckedChange={(v) => setEditing({ ...editing, sandbox_mode: v })} />
                 <Label>Sandbox Mode</Label>
               </div>
             </div>
           )}
-          <DialogFooter>
-            <Button onClick={() => handleSave(editing)}>Save</Button>
-          </DialogFooter>
+          <DialogFooter><Button onClick={() => handleSave(editing)}>Save</Button></DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

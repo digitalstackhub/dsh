@@ -3,7 +3,6 @@ import { createClient } from '@/lib/supabase/server'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ResourceGrid } from '@/components/shared/resource-grid'
 import { ResourceFilters } from '@/components/shared/resource-filters'
-import { getSetting } from '@/lib/database/settings'
 
 export const metadata = {
   title: 'Resource Library',
@@ -19,14 +18,12 @@ export default async function ResourcesPage({
   const category = searchParams?.category as string | undefined
   const search = searchParams?.search as string | undefined
 
-  // Fetch categories for filter pills
   const { data: categories } = await supabase
     .from('resource_categories')
     .select('*')
     .eq('is_active', true)
     .order('display_order', { ascending: true })
 
-  // Fetch resources based on filters
   let query = supabase
     .from('resources')
     .select('*, resource_categories(name, slug)')
@@ -42,7 +39,7 @@ export default async function ResourcesPage({
   }
 
   if (search) {
-    query = query.ilike('title', %%)
+    query = query.ilike('title', `%${search}%`)
   }
 
   const { data: resources } = await query.order('created_at', { ascending: false })

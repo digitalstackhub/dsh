@@ -48,7 +48,7 @@ export function PointsCard({
           <div className="flex justify-between text-sm mb-1">
             <span className="font-bold text-lg">{points.toLocaleString()}</span>
             <span className="text-muted-foreground">
-              {nextLevel ? ${nextLevel.min_points.toLocaleString()} pts : 'Max Level'}
+              {nextLevel ? `${nextLevel.min_points.toLocaleString()} pts` : 'Max Level'}
             </span>
           </div>
           <Progress value={progress} className="h-2" />

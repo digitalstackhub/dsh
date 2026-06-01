@@ -1,35 +1,28 @@
 ﻿import { createClient } from '@/lib/supabase/server'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Suspense } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Users, Package, DollarSign, Activity, TrendingUp, Download, Star } from 'lucide-react'
+import { Users, Package, DollarSign, Activity } from 'lucide-react'
 
 export default async function AdminDashboard() {
   const supabase = await createClient()
 
-  // Fetch counts
   const [
     { count: totalUsers },
     { count: totalResources },
-    { count: totalDownloads },
     { count: activeSubscriptions },
-    { count: totalRevenue },
   ] = await Promise.all([
     supabase.from('profiles').select('*', { count: 'exact', head: true }),
     supabase.from('resources').select('*', { count: 'exact', head: true }).eq('is_active', true),
-    supabase.from('downloads').select('*', { count: 'exact', head: true }),
     supabase.from('subscriptions').select('*', { count: 'exact', head: true }).eq('status', 'active'),
-    supabase.from('subscriptions').select('amount_paid', { count: 'exact', head: true }).eq('status', 'active'),
   ])
 
-  // Calculate revenue
   const { data: revenueData } = await supabase
     .from('subscriptions')
     .select('amount_paid')
     .eq('status', 'active')
   const totalRevenueAmount = revenueData?.reduce((sum, s) => sum + (s.amount_paid || 0), 0) || 0
 
-  // Recent users
   const { data: recentUsers } = await supabase
     .from('profiles')
     .select('*')
@@ -72,7 +65,7 @@ export default async function AdminDashboard() {
               <DollarSign className="h-8 w-8 text-emerald-400" />
               <div>
                 <p className="text-sm text-muted-foreground">Revenue</p>
-                <p className="text-2xl font-bold"></p>
+                <p className="text-2xl font-bold">${totalRevenueAmount.toFixed(2)}</p>
               </div>
             </CardContent>
           </Card>
@@ -92,10 +85,7 @@ export default async function AdminDashboard() {
 
       <Suspense fallback={<Skeleton className="h-60 rounded-2xl" />}>
         <Card className="border-white/10">
-          <CardHeader>
-            <CardTitle>Recent Users</CardTitle>
-          </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             <table className="data-table">
               <thead>
                 <tr>
@@ -111,7 +101,7 @@ export default async function AdminDashboard() {
                   <tr key={u.id}>
                     <td className="font-medium">{u.full_name || 'N/A'}</td>
                     <td className="text-muted-foreground">{u.email}</td>
-                    <td><span className={adge }>{u.role}</span></td>
+                    <td><span className={`badge ${u.role === 'admin' ? 'badge-danger' : 'badge-info'}`}>{u.role}</span></td>
                     <td>{u.points_balance}</td>
                     <td className="text-muted-foreground text-xs">{new Date(u.created_at).toLocaleDateString()}</td>
                   </tr>

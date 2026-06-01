@@ -13,7 +13,6 @@ export default async function SupportPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // Fetch user's tickets
   const { data: tickets } = await supabase
     .from('support_tickets')
     .select('*, support_categories(name)')
@@ -52,7 +51,7 @@ export default async function SupportPage() {
                 {tickets.map((ticket: any) => (
                   <Link
                     key={ticket.id}
-                    href={/dashboard/support/}
+                    href={`/dashboard/support/${ticket.id}`}
                     className="flex items-center justify-between p-4 bg-dark-900 rounded-xl border border-white/5 hover:border-primary/30 transition-colors"
                   >
                     <div className="flex items-center gap-3">

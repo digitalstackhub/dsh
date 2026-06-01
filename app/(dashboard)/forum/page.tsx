@@ -13,14 +13,12 @@ export default async function ForumPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // Fetch forum categories
   const { data: categories } = await supabase
     .from('forum_categories')
     .select('*, forum_topics(count)')
     .eq('is_active', true)
     .order('display_order', { ascending: true })
 
-  // Fetch recent topics
   const { data: topics } = await supabase
     .from('forum_topics')
     .select('*, profiles(full_name, avatar_url), forum_categories(name)')
@@ -56,7 +54,7 @@ export default async function ForumPage() {
                     {topics.map((topic: any) => (
                       <Link
                         key={topic.id}
-                        href={/dashboard/forum/}
+                        href={`/dashboard/forum/${topic.slug}`}
                         className="flex items-center justify-between p-3 bg-dark-900 rounded-xl border border-white/5 hover:border-primary/30 transition-colors"
                       >
                         <div className="flex items-center gap-3">

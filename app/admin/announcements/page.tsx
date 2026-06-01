@@ -108,17 +108,29 @@ export default function AdminAnnouncementsPage() {
 }
 
 function AnnouncementForm({ announcement, onSave }: any) {
-  const [form, setForm] = useState({
-    title: '',
-    message: '',
-    type: 'info',
-    start_date: new Date().toISOString().split('T')[0],
-    end_date: '',
-    is_active: true,
-    dismissible: true,
-    ...announcement,
-    start_date: announcement?.start_date ? new Date(announcement.start_date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-    end_date: announcement?.end_date ? new Date(announcement.end_date).toISOString().split('T')[0] : '',
+  const [form, setForm] = useState(() => {
+    const defaults = {
+      title: '',
+      message: '',
+      type: 'info',
+      is_active: true,
+      dismissible: true,
+      start_date: new Date().toISOString().split('T')[0],
+      end_date: '',
+    }
+    if (announcement && announcement.id) {
+      return {
+        ...defaults,
+        ...announcement,
+        start_date: announcement.start_date
+          ? new Date(announcement.start_date).toISOString().split('T')[0]
+          : defaults.start_date,
+        end_date: announcement.end_date
+          ? new Date(announcement.end_date).toISOString().split('T')[0]
+          : defaults.end_date,
+      }
+    }
+    return defaults
   })
 
   return (

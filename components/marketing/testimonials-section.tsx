@@ -58,7 +58,7 @@ export async function TestimonialsSection() {
                       {Array.from({ length: 5 }).map((_, idx) => (
                         <Star
                           key={idx}
-                          className={h-3 w-3 }
+                          className={`h-3 w-3 ${idx < t.rating ? 'text-amber-400 fill-amber-400' : 'text-muted-foreground/30'}`}
                         />
                       ))}
                     </div>
