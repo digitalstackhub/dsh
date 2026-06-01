@@ -1,4 +1,5 @@
-﻿import { createClient } from '@/lib/supabase/server'
+﻿'use client'
+
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Database, Lock, Zap, Globe, Headphones, Shield } from 'lucide-react'
@@ -12,38 +13,13 @@ const iconMap: Record<string, any> = {
   Shield,
 }
 
-// Static feature list (could be database-driven via a features table)
 const features = [
-  {
-    title: 'Massive Library',
-    description: 'Access thousands of premium resources across multiple categories.',
-    icon: 'Database',
-  },
-  {
-    title: 'Secure Downloads',
-    description: 'All resources are virus-scanned and verified by our team.',
-    icon: 'Shield',
-  },
-  {
-    title: 'Instant Access',
-    description: 'No waiting. Download resources immediately after subscribing.',
-    icon: 'Zap',
-  },
-  {
-    title: 'Global Access',
-    description: 'Access your downloads from anywhere in the world.',
-    icon: 'Globe',
-  },
-  {
-    title: '24/7 Support',
-    description: 'Our support team is always ready to help you.',
-    icon: 'Headphones',
-  },
-  {
-    title: 'Lifetime Updates',
-    description: 'Get free updates for all purchased resources.',
-    icon: 'Lock',
-  },
+  { title: 'Massive Library', description: 'Access thousands of premium resources across multiple categories.', icon: 'Database' },
+  { title: 'Secure Downloads', description: 'All resources are virus-scanned and verified by our team.', icon: 'Shield' },
+  { title: 'Instant Access', description: 'No waiting. Download resources immediately after subscribing.', icon: 'Zap' },
+  { title: 'Global Access', description: 'Access your downloads from anywhere in the world.', icon: 'Globe' },
+  { title: '24/7 Support', description: 'Our support team is always ready to help you.', icon: 'Headphones' },
+  { title: 'Lifetime Updates', description: 'Get free updates for all purchased resources.', icon: 'Lock' },
 ]
 
 export function FeaturesSection() {
